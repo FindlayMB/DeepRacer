@@ -21,6 +21,7 @@ def reward_function(params):
     y = wp2[1] - wp1[1]
     
     #Finds the angle of a line connecting the next two waypoints in relation to x axis, going from -180 to 180
+    #check over math for this part
     if x==0 and y>0:
         next_wp_angle = 90
     elif x==0 and y<0:
@@ -33,7 +34,9 @@ def reward_function(params):
         next_wp_angle += -180
     
     # checks to see if it is close to the left border, gives reward accordingly
-    if (0 <= distance_from_side <= 0.2) and (params['is_left_of_center']):
+    if (-0.2 <= distance_from_side <= 0) and (params['is_left_of_center']):
+        reward = 0.5
+    elif (0 <= distance_from_side <= 0.2) and (params['is_left_of_center']):
         reward = 0.7
     elif (0.2 <= distance_from_side <= 0.5) and (params['is_left_of_center']):
         reward = 1
@@ -63,7 +66,7 @@ def reward_function(params):
     elif diff >= 10:
         reward *= 10/diff
 
-    #rewards speed based of of how fast it is going compaired to max
+    #rewards model based of of how fast it is
     reward *= (speed * 2)
 
 
