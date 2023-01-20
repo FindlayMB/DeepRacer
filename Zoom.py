@@ -62,13 +62,9 @@ def reward_function(params):
         reward *=1.5
     elif diff >= 10:
         reward *= 10/diff
-    
-
-    MAX_SPEED = 0.6
 
     #rewards speed based of of how fast it is going compaired to max
-    speed_rate = speed / MAX_SPEED
-    reward * speed_rate ** 2
+    reward *= (speed * 2)
 
 
     # Always return a float value
