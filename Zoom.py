@@ -21,13 +21,15 @@ def reward_function(params):
     y = wp2[1] - wp1[1]
     
     #Finds the angle of a line connecting the next two waypoints in relation to x axis, going from -180 to 180
-    #check over math for this part
+    #First two if statements that have x==0 are required to avoid dividing by zero
     if x==0 and y>0:
         next_wp_angle = 90
     elif x==0 and y<0:
         next_wp_angle = -90
     else:
         next_wp_angle = math.degrees(math.atan(y / x))
+        
+    #makes the angle be in the correct direction
     if x<0 and y>=0:
         next_wp_angle += 180
     elif x<0 and y<=0:
