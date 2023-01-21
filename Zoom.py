@@ -1,6 +1,6 @@
 #Created on October 16th
 #Creator: Dawson van Vlaanderen
-#Current version: 04
+#Current version: 05
 
 import math
 def reward_function(params):
