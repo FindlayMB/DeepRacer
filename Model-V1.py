@@ -39,7 +39,7 @@ def reward_function(params):
         reward = 1e-3
 
     # Check car speed and add bonus reward
-    if car_speed < 0.85:
+    if car_speed < 0.90:
         reward += 0.5
     else:
         reward += 1.0
