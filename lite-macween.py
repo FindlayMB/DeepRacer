@@ -1,9 +1,9 @@
 # MODEL TRIAL 2
 # Total lap time
-# 02:50.013
+# 
 #
-# VERSION 1
-# 1/21/2023
+# VERSION 2
+# 1/22/2023
 
 import math
 
@@ -13,7 +13,8 @@ def reward_function(params):
     waypoints = params['waypoints']
     closest_waypoints_indices = params['closest_waypoints']
     car_heading = params['heading']
-    
+    car_speed = params['speed']
+
     next_waypoint = waypoints[closest_waypoints_indices[1]]
     prev_waypoint = waypoints[closest_waypoints_indices[0]]
 
@@ -29,4 +30,7 @@ def reward_function(params):
 
     # Using ternary operator to check the direction difference
     reward = 0.5 if direction_diff > 10.0 else 1.0
+
+    # Speed reward system with a speed thresh-hold of 5.0
+    reward += (car_speed - 1) * 0.1
     return float(reward)
