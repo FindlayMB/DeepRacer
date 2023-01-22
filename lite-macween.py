@@ -2,7 +2,7 @@
 # Total lap time
 # 2:50:056
 #
-# VERSION 2
+# VERSION 3
 # 1/22/2023
 
 import math
@@ -32,5 +32,5 @@ def reward_function(params):
     reward = 0.5 if direction_diff > 10.0 else 1.0
 
     # Speed reward system with a speed thresh-hold of 5.0
-    reward += (car_speed - 1) * 0.1
+    reward += (car_speed - 0.85) * 0.1
     return float(reward)

@@ -1,4 +1,4 @@
-# MODEL TRIAL 3
+# MODEL TRIAL 1
 # Total lap time
 # 
 #
@@ -39,7 +39,7 @@ def reward_function(params):
         reward = 1e-3
 
     # Check car speed and add bonus reward
-    if car_speed < 1:
+    if car_speed < 0.85:
         reward += 0.5
     else:
         reward += 1.0
