@@ -1,6 +1,6 @@
 # MODEL TRIAL 2
 # Total lap time
-# 
+# 2:50:056
 #
 # VERSION 2
 # 1/22/2023
