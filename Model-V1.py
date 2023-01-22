@@ -6,29 +6,43 @@
 # 1/22/2023
 
 def reward_function(params):
-    # assign input params
+    # Assign variables from input parameters
     distance_from_center = params['distance_from_center']
     track_width = params['track_width']
     all_wheels_on_track = params['all_wheels_on_track']
-    speed = params['speed']
+    car_speed = params['speed']
 
-    # arrays of markers and rewards
-    markers = [0.1, 0.2, 0.3, 0.4, 0.5]
-    rewards = [3, 2.5, 1.5, 1, 0.5]
+    # Set markers for different sections of the track
+    center_mark = 0.1 * track_width
+    close_to_center_mark = 0.2 * track_width
+    middle_mark = 0.3 * track_width
+    close_to_edge_mark = 0.4 * track_width
+    edge_mark = 0.5 * track_width
 
-    # default reward
-    reward = 1e-3
-    # loop through markers and rewards
-    for i in range(5):
-        # check distance from center and all wheels on track
-        if distance_from_center <= markers[i] * track_width and all_wheels_on_track:
-            reward = rewards[i]
-            break
+    # Check if car is within certain distance from center and all wheels are on track
+    if distance_from_center <= center_mark and all_wheels_on_track:
+        reward = 3
 
-    # check speed and add bonus
-    if speed < 1:
+    elif distance_from_center <= close_to_center_mark and all_wheels_on_track:
+        reward = 2.5
+
+    elif distance_from_center <= middle_mark and all_wheels_on_track:
+        reward = 1.5
+
+    elif distance_from_center <= close_to_edge_mark and all_wheels_on_track:
+        reward = 1
+
+    elif distance_from_center <= edge_mark and all_wheels_on_track:
+        reward = 0.5
+
+    else:
+        reward = 1e-3
+
+    # Check car speed and add bonus reward
+    if car_speed < 1:
         reward += 0.5
     else:
-        reward += 1
+        reward += 1.0
 
-    return reward
+    return float(reward)
+
