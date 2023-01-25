@@ -1,0 +1,74 @@
+import math
+
+def reward_function(params):
+    # input parameters
+    all_wheels_on_track = params['all_wheels_on_track']
+    track_width = params['track_width']
+    distance_from_center = params['distance_from_center']
+    heading = params['heading']
+    speed = params['speed']
+    waypoints = params['waypoints']
+    closest_waypoints = params['closest_waypoints']
+    abs_steering = abs(params['steering_angle']) # Only need the absolute steering angle
+    is_left_of_center = params['is_left_of_center']
+
+
+    # Set the speed threshold based your action space
+    SPEED_THRESHOLD = 0.85
+
+    if not all_wheels_on_track:
+        # Penalize if the car goes off track
+        reward = 1e-3
+    elif speed < SPEED_THRESHOLD:
+        # Penalize if the car goes too slow
+        reward = 0.5
+    elif (0.5*track_width - distance_from_center) < 0.05:
+        reward = 1e-3
+    else:
+        # High reward if the car stays on track and goes fast and is in the borders
+        reward = 1.5
+
+    # The following code is to penalise the reward if the car is far of its turning point
+    # Calculate the direction of the center line based on the closest waypoints
+    next_point = waypoints[closest_waypoints[1]]
+    prev_point = waypoints[closest_waypoints[0]]
+
+    # Calculate the direction in radius, arctan2(dy, dx), the result is (-pi, pi) in radians
+    track_direction = math.atan2(next_point[1] - prev_point[1], next_point[0] - prev_point[0])
+    # Convert to degree
+    track_direction = math.degrees(track_direction)
+
+    # Calculate the difference between the track direction and the heading direction of the car
+    direction_diff = abs(track_direction - heading)
+    if direction_diff > 180:
+        direction_diff = 360 - direction_diff
+
+    DIRECTION_THRESHOLD = 15.0
+    if direction_diff > DIRECTION_THRESHOLD and (speed > 0.6):
+        reward *= 0.2
+
+    # The following code is to make sure the car does not zig zag
+    # Steering penality threshold, change the number based on your action space setting
+    ABS_STEERING_THRESHOLD = 15 
+    
+    # Penalize reward if the car is steering too much
+    if abs_steering > ABS_STEERING_THRESHOLD:
+        reward *= 0.8
+
+    # The following is to dictate how the car will turn
+    #if turning left
+    if heading < 0:
+        if is_left_of_center:
+            reward *= 1.5
+        else:
+            reward *= 0.7
+    # if turning right
+    elif heading > 0:
+        if is_left_of_center:
+            reward *= 0.7
+        else:
+            reward *= 1.5
+    
+    reward += (speed - 0.90) * 0.1
+    
+    return float(reward)
