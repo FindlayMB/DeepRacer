@@ -14,7 +14,7 @@ def reward_function(params):
 
 
     # Set the speed threshold based your action space
-    SPEED_THRESHOLD = 0.85
+    SPEED_THRESHOLD = 1.0
 
     if not all_wheels_on_track:
         # Penalize if the car goes off track
@@ -43,7 +43,11 @@ def reward_function(params):
     if direction_diff > 180:
         direction_diff = 360 - direction_diff
 
-    DIRECTION_THRESHOLD = 15.0
+    # if its a straight line go faster
+    if direction_diff < 7 :
+        reward *= (speed*2)
+
+    DIRECTION_THRESHOLD = 10.0
     if direction_diff > DIRECTION_THRESHOLD:
         reward *= 0.5
 
@@ -53,20 +57,20 @@ def reward_function(params):
     
     # Penalize reward if the car is steering too much
     if abs_steering > ABS_STEERING_THRESHOLD:
-        reward *= 0.8
+        reward *= 0.7
 
     # The following is to dictate how the car will turn
     #if turning left
     if heading < 0:
         if is_left_of_center:
-            reward *= 1.2
+            reward *= 0.7
         else:
-            reward *= 0.8
+            reward *= 1.5
     # if turning right
     elif heading > 0:
         if is_left_of_center:
-            reward *= 0.8
+            reward *= 1.5
         else:
-            reward *= 1.2
+            reward *= 0.7
 
     return float(reward)
